@@ -15,7 +15,8 @@ urlpatterns = [
     #path('', NoteList.as_view(), name='listcreate'),
     
     path('', views.getRoutes),
-    path('notes/', views.getNotes),
+    path('notes/', views.getNotes, name="notes"),
+    path('notes/<str:pk>/', views.getNote, name="note"),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     

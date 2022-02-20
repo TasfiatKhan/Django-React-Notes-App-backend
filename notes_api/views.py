@@ -12,7 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import NoteSerializer, TagSerializer
 from note.models import Note
 from users.models import User
-
+from .utils import updateNote, getNoteDetail, deleteNote, getNotesList, createNote
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -27,6 +27,57 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+
+
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def getNotes(request):
+
+    if request.method == 'GET':
+        return getNotesList(request)
+
+    if request.method == 'POST':
+        return createNote(request)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def getNote(request, pk):
+
+    if request.method == 'GET':
+        return getNoteDetail(request, pk)
+
+    if request.method == 'PUT':
+        return updateNote(request, pk)
+
+    if request.method == 'DELETE':
+        return deleteNote(request, pk)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getNotes(request):
@@ -37,10 +88,27 @@ def getNotes(request):
 
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getNoteDetail(request, pk):
+    user = request.user
+    notes = user.note_set.all()
+    note = notes.get(id=pk)
+    serializer = NoteSerializer(note, many=False)
+    return Response(serializer.data)
 
 
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteNote(request, pk):
+    user = request.user
+    notes = user.note_set.all()
+    note = notes.get(id=pk)
+    note.delete()
+    return Response('Note was deleted!')
 
+'''
 
 
 
