@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from note.models import Note
+from note.models import Note, Tag
 from .serializers import NoteSerializer
 from users.models import User
 
@@ -18,9 +18,11 @@ def getNoteDetail(request, pk):
     return Response(serializer.data)
 
 def createNote(request):
+    user = request.user
     data = request.data
     note = Note.objects.create(
-        body=data['body']
+        body = data['body'],       
+        author=user
     )
     serializer = NoteSerializer(note, many=False)
     return Response(serializer.data)
@@ -30,8 +32,6 @@ def updateNote(request, pk):
     user = request.user
     notes = user.note_set.all()
     note = notes.get(id=pk)
-    
-    #note = Note.objects.get(id=pk)
     serializer = NoteSerializer(instance=note, data=data)
 
     if serializer.is_valid():

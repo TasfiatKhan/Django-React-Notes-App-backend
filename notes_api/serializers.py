@@ -8,7 +8,7 @@ class TagSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class NoteSerializer(serializers.ModelSerializer):
-    tag = TagSerializer(read_only=True, many=True)
+    tag = TagSerializer(read_only=False, many=True)
     class Meta:
         model = Note
         fields = '__all__'

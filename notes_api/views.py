@@ -10,7 +10,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import NoteSerializer, TagSerializer
-from note.models import Note
+from note.models import Note, Tag
 from users.models import User
 from .utils import updateNote, getNoteDetail, deleteNote, getNotesList, createNote
 
@@ -56,8 +56,12 @@ def getNote(request, pk):
 
 
 
-
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getTags(request):
+    tags = Tag.objects.all()
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data)
 
 
 
